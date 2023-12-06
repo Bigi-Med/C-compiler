@@ -1,6 +1,6 @@
 A C compiler written purely in javascript
 
-Don't know why but using commonJS syntaxe for managing modules
+Using commonJS syntaxe for managing modules
 
 What's DONE:
 LEXICAL ANALYSIS: tokenize.js
