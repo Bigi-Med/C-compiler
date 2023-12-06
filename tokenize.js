@@ -1,20 +1,38 @@
 function tokenizer(inputFile){
     var token = [];
-    console.log(inputFile)
-    console.log(typeof(inputFile))
     const numberRegex = /[0-9]/;
     const newLineRegex = /\r?\n/;
     const letterRegex = /[a-zA-Z]/;
+    const specialCharRegex = /[^a-zA-Z0-9_]|^\d/;
     const whiteSpace = /\s/;
     var index=0;
-    var test = 0;
+    var char= 0;
     while(index < inputFile.length){
     //Start by tokenizing the non-words/numbers keys
-        if(inputFile[index] === "="){
+    char = inputFile[index];    
+    if(inputFile[index] === "="){
             token.push({
                 type:'equal',
                 value:inputFile[index]
             });
+            index++;
+            continue;
+        }
+
+        if(inputFile[index] === "\\"){
+            token.push({
+                type:'backslash',
+                value:inputFile[index],
+            })
+            index++;
+            continue;
+        }
+
+        if(numberRegex.test(inputFile[index])){
+            token.push({
+                type:'number',
+                value: inputFile[index]
+            })
             index++;
             continue;
         }
@@ -123,6 +141,15 @@ function tokenizer(inputFile){
             continue;
         }
 
+        if(inputFile[index] === '.'){
+            token.push({
+                type:'dot',
+                value: inputFile[index]
+            })
+            index++;
+            continue;
+        }
+
         if(inputFile[index] === ')'){
             token.push({
                 type:'close-par',
@@ -194,15 +221,6 @@ function tokenizer(inputFile){
             index++;
             continue;
         }
-
-        if(inputFile[index] === "."){
-            token.push({
-                type:'dote',
-                value:inputFile[index]
-            })
-            index++;
-            continue;
-        }
        
         if(newLineRegex.test(inputFile[index]) ) {
             console.log("in regex")
@@ -239,6 +257,8 @@ function tokenizer(inputFile){
                     type:'sing-cmnt',
                     value:'//'
                 })
+                index++;
+                continue;
             } else{
                 if(inputFile[index+1] === "*"){
                     token.push({
@@ -254,12 +274,15 @@ function tokenizer(inputFile){
                     value:'*/'
                     })
                     index= j;
+                    continue;
                 } else{
                 token.push({
                     type:'divide',
                     value:inputFile[index],
                     })
                 }
+                index++;
+                continue;
 
             }
         }
@@ -267,7 +290,7 @@ function tokenizer(inputFile){
         if(letterRegex.test(inputFile[index]) || inputFile[index] === "_"){
             let j = index;
             let initialIndex = index;
-            while(!whiteSpace.test(inputFile[j]) && inputFile[j] != ';'){
+            while(!whiteSpace.test(inputFile[j]) && inputFile[j] != ';' && !specialCharRegex.test(inputFile[j])){
                 j++;
             }
             index = j;
@@ -277,6 +300,8 @@ function tokenizer(inputFile){
             })
             continue;
         }
+
+        throw new SyntaxError("tf is this: " + char)
     }
     console.log(token)
     return token
