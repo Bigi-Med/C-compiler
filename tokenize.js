@@ -1,5 +1,7 @@
 function tokenizer(inputFile){
     var token = [];
+    console.log(inputFile)
+    console.log(typeof(inputFile))
     const numberRegex = /[0-9]/;
     const newLineRegex = /\r?\n/;
     const letterRegex = /[a-zA-Z]/;
@@ -13,6 +15,11 @@ function tokenizer(inputFile){
                 type:'equal',
                 value:inputFile[index]
             });
+            index++;
+            continue;
+        }
+
+        if(whiteSpace.test(inputFile[index])){
             index++;
             continue;
         }
@@ -266,10 +273,8 @@ function tokenizer(inputFile){
             index = j;
             token.push({
                 type:'word',
-                value:inputFile.slice(initialIndex,index+1)
+                value:inputFile.slice(initialIndex,index)
             })
-
-            index++;
             continue;
         }
     }
