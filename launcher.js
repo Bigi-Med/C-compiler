@@ -1,7 +1,9 @@
 const tokenizer =  require('./tokenize.js');
 const fs  = require('fs').promises
 const path = require('path')
-
+var tokens;
+var ast;
+const parser = require('./parser.js')
 async function readFile(filePath){
     try{
       const data = await fs.readFile(filePath,'utf8')
@@ -18,7 +20,10 @@ async function processFile(filePath){
     }
     try{
       const data = await readFile(filePath);
-      tokenizer(data)
+      tokens = tokenizer(data)
+      console.log(tokens)
+      ast = parser(tokens);
+      console.log(ast)
     } catch(err){
       console.log(err)
     }

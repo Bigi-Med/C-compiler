@@ -300,10 +300,8 @@ function tokenizer(inputFile){
             })
             continue;
         }
-
         throw new SyntaxError("tf is this: " + char)
     }
-    console.log(token)
     return token
 }
 module.exports = tokenizer;
