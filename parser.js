@@ -4,28 +4,23 @@ function parser(token){
         type:'Program',
         body:[]
     }
-
     //recursive function that will traverse the token 
     function goInDeep(){
-
-        console.log(token[current])
-
         if(token[current].type === "diez"){
-
             var node ={
                 type:'IncludeStatement',
                 params:[]
             }
+            current = current +2;
             while(token[current].type != 'more'){
                 if(token[current].type === "less"){
                     current++;
                     continue;
                 }
-                console.log(token[current])
-                current++;
                 node.params.push(goInDeep());
             }
-
+            current++;
+            return node;
         }
 
         if(token[current].type === "word"){
@@ -46,6 +41,58 @@ function parser(token){
             current++;
             return node;
         }
+
+        if(token[current].type === "op-par"){
+            var node = {
+                type: 'FunctionParam',
+                params: [],
+            }
+             current++;
+             while(token[current].type != "close-par"){
+                if(token[current].type === "comma"){
+                    current++;
+                    continue;
+                }
+                node.params.push(goInDeep());
+             }
+             current++;
+             return node;
+        }
+
+        if(token[current].type === "op_curl"){
+            var node = {
+                type:'Function',
+                params:[]
+            }
+            current++;
+             while(token[current].type !="close-curl"){
+                 node.params.push(goInDeep())
+             }
+             current++;
+             return node;
+        }
+
+        if(token[current].type === "number"){
+            var node = {
+                type: 'NumberLiteral',
+                value:token[current].value
+            }
+            current++;
+            return node;
+        }
+
+        if(token[current].type === "d-quote"){
+            var node = {
+                type: 'StringLiteral',
+                params:[]
+            }
+            current++;
+            while(token[current].type != "d-quote"){
+                node.params.push(goInDeep())
+            }
+            current++;
+            return node;
+        }
          else{
             current++;
             return;
@@ -56,6 +103,8 @@ function parser(token){
         while(current<token.length) {
             ast.body.push(goInDeep())
         }
+
+        return ast
 
 }
 

@@ -23,7 +23,7 @@ async function processFile(filePath){
       tokens = tokenizer(data)
       console.log(tokens)
       ast = parser(tokens);
-      console.log(ast)
+      console.log(JSON.stringify(ast,null,2))
     } catch(err){
       console.log(err)
     }
