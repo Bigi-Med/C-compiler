@@ -4,10 +4,9 @@ Using commonJS syntaxe for managing modules
 
 What's DONE:
 LEXICAL ANALYSIS: tokenize.js
+SYNTAX ANALYSIS(AST): parser.js 
 
 TODO
-
-SYNTAX ANALYSIS(AST): parser.js 
 
 SEMANTIC ANALYSIS: validator.js
 
